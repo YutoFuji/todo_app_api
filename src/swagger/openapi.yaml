@@ -1,0 +1,228 @@
+openapi: '3.0.0'
+info:
+  title: todo_app_api
+  description: This simple todo app is written in Ruby on Rails
+  version: 1.0.0
+tags:
+  - name: Register
+  - name: Login
+  - name: Users
+  - name: Todos
+paths:
+  /register:
+    post:
+      tags:
+        - Register
+      summary: Register a user.
+      requestBody:
+        description: Infomation to register a user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+            example:
+              id: 1
+              name: 'User'
+              password: 'password'
+      responses:
+        '201':
+          description: Registration succeed.
+  /login:
+    post:
+      tags:
+        - Login
+      summary: Login user.
+      requestBody:
+        description: Information to login user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+            example:
+              id: 1
+              name: 'User'
+              password: 'password'
+      responses:
+        '201':
+          description: Login succeed.
+  /users/{user_id}/todos:
+    get:
+      tags:
+        - Todos
+      summary: List of user's todos.
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Array of todos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+                example:
+                  - id: 1
+                    title: 'Title1'
+                    status: 'Status1'
+                    target_completion_date: 'YYYY-MM-DD'
+    post:
+      tags:
+        - Todos
+      summary: Create a new todo
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Information to create a new todo
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Todo'
+              example:
+                - id: 1
+                  title: 'Title1'
+                  status: 'Status1'
+                  target_completion_date: 'YYYY-MM-DD'
+      responses:
+        '201':
+          description: Create todo succeed.
+  /users/{user_id}/todos/{id}:
+    get:
+      tags:
+        - Todos
+      summary: User's todo details
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: Todo's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Object of todo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+                example:
+                  - id: 1
+                    title: 'Title1'
+                    status: 'Status1'
+                    target_completion_date: 'YYYY-MM-DD'
+    put:
+      tags:
+        - Todos
+      summary: Update a todo
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: Todo's id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Information to create a new todo. 空が送られたら更新しない
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Todo'
+              example:
+                - id: 1
+                  title: 'Title1'
+                  status: 'Status1'
+                  target_completion_date: 'YYYY-MM-DD'
+      responses:
+        '201':
+          description: Update todo succeed.
+    delete:
+      tags:
+        - Todos
+      summary: Delete a todo
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: Todo's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Delete todo succeed.
+
+components:
+  schemas:
+    RegisterUser:
+      type: object
+      required:
+        - id
+        - name
+        - password
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        password:
+          type: string
+    LoginUser:
+      type: object
+      required:
+        - id
+        - name
+        - password
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        password:
+          type: string
+    Todo:
+      type: object
+      required:
+        - id
+        - title
+        - content
+        - status
+        - target_completion_date
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        status:
+          type: string
+        target_completion_date:
+          type: string
