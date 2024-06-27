@@ -70,3 +70,4 @@ yarn-debug.log*
 
 src/db/mysql_data
 src/tmp/*
+src/log/*
