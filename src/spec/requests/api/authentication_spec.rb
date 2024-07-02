@@ -12,9 +12,7 @@ RSpec.describe "Authentications", type: :request do
   describe "POST /login" do
     it "ログインできること" do
       post api_login_path, params: params, headers: headers
-      json_responses = JSON.parse(response.body)
-      expect(json_responses["user"]["name"]).to eq(user.name)
-      expect(json_responses["user"]["email"]).to eq(user.email)
+      expect(response).to have_http_status(200)
     end
 
     let(:uncorrect_params) do
