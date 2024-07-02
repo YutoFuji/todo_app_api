@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # root "users#index"
 
   namespace "api" do
-    resources :users, only: %i[create]
-    post 'login', to: 'authentication#login'
+    post "register", to: "users#create"
+    post "login", to: "authentication#login"
   end
 end

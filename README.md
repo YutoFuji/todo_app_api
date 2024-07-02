@@ -24,3 +24,15 @@ docker-compose -f docker-swagger-compose.yaml up -d
 アクセス
 
 http://localhost:8002
+
+# Swagger Preview
+
+このプロジェクトではテストにrspecを使用しています。
+
+## 使用方法
+
+以下のコマンドを実行してRspecを流します。
+
+```
+docker-compose run --rm rails bundle exec rspec spec/requests/
+```
