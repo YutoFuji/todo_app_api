@@ -7,7 +7,7 @@ class Api::UsersController < ApplicationController
       render json: @user, status: :created
     else
       # TODO: エラーハンドリングまとめて適用
-      render json: @user.errors, status: :unprocessable_entity
+      render status: :unprocessable_entity
     end
   end
 
