@@ -46,6 +46,7 @@ paths:
         '201':
           description: Login succeed.
   /users/{user_id}/todos:
+    # TODO: add bearer auth
     get:
       tags:
         - Todos
@@ -179,11 +180,17 @@ paths:
           description: Delete todo succeed.
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     RegisterUser:
       type: object
       required:
         - id
+        - email
         - name
         - password
       properties:
@@ -191,6 +198,8 @@ components:
           type: integer
           format: int64
         name:
+          type: string
+        email:
           type: string
         password:
           type: string
@@ -199,12 +208,15 @@ components:
       required:
         - id
         - name
+        - email
         - password
       properties:
         id:
           type: integer
           format: int64
         name:
+          type: string
+        email:
           type: string
         password:
           type: string

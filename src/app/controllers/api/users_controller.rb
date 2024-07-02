@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Api::UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
@@ -6,6 +6,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: @user, status: :created
     else
+      # TODO: エラーハンドリングまとめて適用
       render json: @user.errors, status: :unprocessable_entity
     end
   end
@@ -13,7 +14,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:name, :password)
+    params.permit(:name, :email, :password)
   end
 
 end
