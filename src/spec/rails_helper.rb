@@ -69,6 +69,8 @@ RSpec.configure do |config|
 
   config.include JsonApiHelpers
 
+  config.include HeadersHelpers
+
   # FactoryBotの利用をON
   config.include FactoryBot::Syntax::Methods
 
