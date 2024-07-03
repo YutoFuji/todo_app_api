@@ -10,11 +10,11 @@ create_table "users", charset: "utf8mb4", force: :cascade do |t|
 end
 
 create_table "todos", charset: "utf8mb4", force: :cascade do |t|
+  t.references "user"
   t.string "title", null: false
   t.string "content", null: false
   t.string "status", null: false
   t.date "target_completion_date", null: false
-  t.references "user"
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
 end

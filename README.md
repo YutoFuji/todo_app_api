@@ -1,3 +1,18 @@
+# サーバー起動
+
+Docker Composeを使用してサーバーを立ち上げます。
+
+## 使用方法
+
+以下のコマンドを実行します。
+```
+docker-compose up -d
+```
+
+下記URLにアクセスします。
+
+http://localhost:8888
+
 # マイグレーション
 
 このプロジェクトではマイグレーションにridgepoleを使用しています。
@@ -21,17 +36,17 @@ docker-compose run --rm rails bundle exec ridgepole -c config/database.yml --app
 docker-compose -f docker-swagger-compose.yaml up -d
 ```
 
-アクセス
+下記URLにアクセスします。
 
 http://localhost:8002
 
-# Swagger Preview
+# テストツール
 
-このプロジェクトではテストにrspecを使用しています。
+このプロジェクトではテストにRSpecを使用しています。
 
 ## 使用方法
 
-以下のコマンドを実行してRspecを流します。
+以下のコマンドを実行してRSpecを流します。
 
 ```
 docker-compose run --rm rails bundle exec rspec spec/requests/
