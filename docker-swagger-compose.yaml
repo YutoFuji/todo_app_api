@@ -1,0 +1,25 @@
+version: '3'
+services:
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    container_name: "rails-todo-swagger-editor"
+    ports:
+      - "8001:8080"
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: "rails-todo-swagger-ui"
+    ports:
+      - "8002:8080"
+    volumes:
+      - ./src/swagger/openapi.yaml:/openapi.yaml
+    environment:
+      SWAGGER_JSON: /openapi.yaml
+
+  swagger-api:
+    image: stoplight/prism:3
+    container_name: "rails-todo-swagger-api"
+    ports:
+      - "8003:4010"
+    command: mock -h 0.0.0.0 /openapi.yaml
+    volumes:
+      - ./src/swagger/openapi.yaml:/openapi.yaml
