@@ -11,5 +11,8 @@ Rails.application.routes.draw do
   namespace "api" do
     post "register", to: "users#create"
     post "login", to: "authentication#login"
+    resources :users do
+      resources :todos
+    end
   end
 end

@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "Authentications", type: :request do
+  let(:jwt_token) { "jwt_token" }
+  let(:headers) do
+    {
+      Authorization: "Bearer #{jwt_token}"
+    }
+  end
   let(:user) { create(:user) }
   let(:params) do
     {

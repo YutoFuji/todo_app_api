@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::API
   def create_token(user_id)
-    token = JWT.encode(payload(user_id), secret_key)
-    token
+    session_token = JWT.encode(payload(user_id), secret_key)
+
+    session_token
   end
 
   def current_user
@@ -9,8 +10,6 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_user!
-    authorization_header = request.headers[:authorization]
-
     @current_user ||= User.find(decoded_token[0]["user_id"])
   end
 
@@ -26,6 +25,10 @@ class ApplicationController < ActionController::API
 
   def token
     authorization_header.split(" ")[1]
+  end
+
+  def authorization_header
+    request.headers[:authorization]
   end
 
   def secret_key
