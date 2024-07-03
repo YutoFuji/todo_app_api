@@ -68,6 +68,6 @@ yarn-debug.log*
 !/storage/.keep
 /public/uploads
 
-src/db/mysql_data
-src/tmp/*
-src/log/*
+/db/mysql_data
+/tmp/*
+/log/*
