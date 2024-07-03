@@ -166,6 +166,66 @@ paths:
       responses:
         '201':
           description: Delete todo succeed.
+  /users/{user_id}:
+    put:
+      tags:
+        - Users
+      summary: Rename user.
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Able to request only name for this path
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Rename succeed.
+  /users/{user_id}/password_reset:
+    put:
+      tags:
+        - Users
+      summary: Change password
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Information to change password
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - current_password
+                - password
+                - password_confirm
+              properties:
+                current_password:
+                  type: string
+                password:
+                  type: string
+                password_confirm:
+                  type: string
+      responses:
+        '201':
+          description: Change password succeed.
+        '400':
+          description: Password confirmation is diffrent from password
 
 components:
   securitySchemes:

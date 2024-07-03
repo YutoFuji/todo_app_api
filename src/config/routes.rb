@@ -11,8 +11,9 @@ Rails.application.routes.draw do
   namespace "api" do
     post "register", to: "users#create"
     post "login", to: "authentication#login"
-    resources :users do
+    resources :users, only: [:update] do
       resources :todos
+      put "password_reset", to: "users#update_password"
     end
   end
 end
