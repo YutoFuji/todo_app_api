@@ -3,12 +3,27 @@ class Api::UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user.incomplete!
 
     if @user.save
-      render json: @user, status: :created
+      ActiveRecord::Base.transaction do
+        @user.generate_register_token
+        send_email(@user)
+      end
+      render status: :ok
     else
       # TODO: エラーハンドリングまとめて適用
       render status: :unprocessable_entity
+    end
+  end
+
+  def email_confirm
+    user = User.find_by(register_token: params["token"])
+    if user && user.register_token_valid?
+      user.complete!
+      render status: :ok
+    else
+      render status: :bad_request
     end
   end
 
@@ -39,7 +54,19 @@ class Api::UsersController < ApplicationController
     params.permit(:name, :email, :password)
   end
 
+  def send_email(user)
+    RegisterMailer.register(user, user.email).deliver_now
+  end
+
   def password_valid?
-    params["password"] == params["password_confirm"] && current_user.current_password?(params["current_password"])
+    password_confirm_same? && current_password_same?
+  end
+
+  def password_confirm_same?
+    params["password"] == params["password_confirm"]
+  end
+
+  def current_password_valid?
+    current_user.current_password?(params["current_password"])
   end
 end
