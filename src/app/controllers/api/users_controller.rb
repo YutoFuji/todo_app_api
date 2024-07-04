@@ -15,7 +15,7 @@ class Api::UsersController < ApplicationController
         @user.generate_register_token
         send_email(@user)
       end
-      render status: :ok
+      render json: @user, status: :ok
     else
       # TODO: エラーハンドリングまとめて適用
       render status: :unprocessable_entity
