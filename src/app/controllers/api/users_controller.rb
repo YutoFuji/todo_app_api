@@ -19,7 +19,7 @@ class Api::UsersController < ApplicationController
 
   def email_confirm
     user = User.find_by(register_token: params["token"])
-    if user && user.valid_register_token?
+    if user && user.register_token_valid?
       user.complete!
       render status: :ok
     else
@@ -66,7 +66,7 @@ class Api::UsersController < ApplicationController
     params["password"] == params["password_confirm"]
   end
 
-  def current_password_same?
+  def current_password_valid?
     current_user.current_password?(params["current_password"])
   end
 end

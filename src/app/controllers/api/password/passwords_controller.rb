@@ -15,7 +15,7 @@ class Api::Password::PasswordsController < ApplicationController
 
   def reset
     user = User.find_by(password_reset_token: params["token"])
-    if user && user.valid_password_reset_token?
+    if user && user.password_reset_token_valid?
       user.reset_password(params["password"])
       render status: :ok
     else

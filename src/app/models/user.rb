@@ -10,7 +10,7 @@ class User < ApplicationRecord
     save!
   end
 
-  def valid_register_token?
+  def register_token_valid?
     (self.register_token_sent_at + 1.hour) > Time.zone.now
   end
 
@@ -24,7 +24,7 @@ class User < ApplicationRecord
     save!
   end
 
-  def valid_password_reset_token?
+  def password_reset_token_valid?
     (self.password_reset_token_sent_at + 1.hour) > Time.zone.now
   end
 
