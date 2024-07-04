@@ -13,7 +13,11 @@ Rails.application.routes.draw do
     post "login", to: "authentication#login"
     resources :users, only: [:update] do
       resources :todos
-      put "password_reset", to: "users#update_password"
+      put "password_update", to: "users#update_password"
+      namespace "password" do
+        post "forgot", to: "passwords#forgot"
+        post "reset", to: "passwords#reset"
+      end
     end
   end
 end

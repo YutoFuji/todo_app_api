@@ -192,7 +192,7 @@ paths:
       responses:
         '200':
           description: Rename succeed.
-  /users/{user_id}/password_reset:
+  /users/{user_id}/password_update:
     put:
       tags:
         - Users
@@ -226,6 +226,53 @@ paths:
           description: Change password succeed.
         '400':
           description: Password confirmation is diffrent from password
+  /users/{user_id}/password/forgot:
+    post:
+      tags:
+        - Users
+      summary: Reset password if forgot
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sent password reset mail
+  /users/{user_id}/password/reset:
+    post:
+      tags:
+        - Users
+      summary: Reset password if forgot
+      parameters:
+        - name: user_id
+          in: path
+          description: User's id
+          required: true
+          schema:
+            type: integer
+        - name: token
+          in: query
+          description: reset token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: New password
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Sent password reset mail
 
 components:
   securitySchemes:
