@@ -2,6 +2,11 @@ class Api::UsersController < ApplicationController
   before_action :authenticate_user!, only: [:update, :update_password]
 
   def create
+    unless password_confirm_same?
+      render status: :bad_request
+      return
+    end
+
     @user = User.new(user_params)
     @user.incomplete!
 
@@ -59,7 +64,7 @@ class Api::UsersController < ApplicationController
   end
 
   def password_valid?
-    password_confirm_same? && current_password_same?
+    password_confirm_same? && current_password_valid?
   end
 
   def password_confirm_same?
