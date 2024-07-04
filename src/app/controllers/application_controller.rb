@@ -10,7 +10,12 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_user!
-    @current_user ||= User.find(decoded_token[0]["user_id"])
+    user = User.find(decoded_token[0]["user_id"])
+    if user.complete?
+      @current_user ||= user
+    else
+      render status: :bad_request
+    end
   end
 
   private

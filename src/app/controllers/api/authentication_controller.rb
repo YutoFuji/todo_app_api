@@ -3,7 +3,7 @@ class Api::AuthenticationController < ApplicationController
     @user = User.find_by(email: params[:email])
     if @user&.authenticate(params[:password])
       token = create_token(@user.id)
-      render status: :ok
+      render json: { "token": token }
     else
       # TODO: エラーハンドリングまとめて適用
       render status: :unauthorized
