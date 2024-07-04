@@ -23,7 +23,7 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "PUT /users/{user_id}/password_reset" do
+  describe "PUT /users/{user_id}/password_update" do
     let(:params) do
       {
         "current_password": "password",
@@ -34,7 +34,7 @@ RSpec.describe "Users", type: :request do
     it "パスワードを変更できること" do
       authenticate_stub(user)
       expect do
-        put api_user_password_reset_path(user_id: user.id), params: params, headers: headers
+        put api_user_password_update_path(user_id: user.id), params: params, headers: headers
       end.to change { user.reload.password }.from("password").to("new_password")
     end
     context "確認パスワードが異なっていたとき" do
@@ -47,7 +47,7 @@ RSpec.describe "Users", type: :request do
       end
       it "エラーが起こること" do
         authenticate_stub(user)
-        put api_user_password_reset_path(user_id: user.id), params: invalid_params, headers: headers
+        put api_user_password_update_path(user_id: user.id), params: invalid_params, headers: headers
         expect(response).to have_http_status(400)
       end
     end
@@ -61,7 +61,7 @@ RSpec.describe "Users", type: :request do
       end
       it "エラーが起こること" do
         authenticate_stub(user)
-        put api_user_password_reset_path(user_id: user.id), params: invalid_params, headers: headers
+        put api_user_password_update_path(user_id: user.id), params: invalid_params, headers: headers
         expect(response).to have_http_status(400)
       end
     end

@@ -49,5 +49,5 @@ http://localhost:8002
 以下のコマンドを実行してRSpecを流します。
 
 ```
-docker-compose run --rm rails bundle exec rspec spec/requests/
+docker-compose run --rm rails bundle exec rspec
 ```
