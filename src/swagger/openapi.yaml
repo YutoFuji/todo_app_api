@@ -302,6 +302,8 @@ components:
           type: string
         password:
           type: string
+        password_confirm:
+          type: string
     LoginUser:
       type: object
       required:
