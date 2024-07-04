@@ -15,13 +15,28 @@ http://localhost:8888
 
 # マイグレーション
 
+データベース作成します。
+
+```
+docker-compose run --rm rails bundle exec db:create
+```
+
 このプロジェクトではマイグレーションにridgepoleを使用しています。
 
 ## 使用方法
 
 以下のコマンドを実行して、スキーマの変更を行います。
+
+開発環境
+
 ```
 docker-compose run --rm rails bundle exec ridgepole -c config/database.yml --apply -f db/Schemafile
+```
+
+テスト環境
+
+```
+docker-compose run --rm rails bundle exec ridgepole -c config/database.yml --apply -f db/Schemafile -E test
 ```
 
 # Swagger Preview
