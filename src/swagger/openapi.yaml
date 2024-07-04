@@ -13,57 +13,65 @@ paths:
     post:
       tags:
         - Register
-      summary: Register a user.
+      summary: ユーザー情報登録
       requestBody:
-        description: Infomation to register a user.
+        description: 名前、メールアドレス、パスワードを入力
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RegisterUser'
-            example:
-              name: 'name'
-              email: 'abc@example.com'
-              password: 'password'
       responses:
-        '201':
-          description: Registration succeed.
-        '422':
-          description: Unprocessable entity.
+        '200':
+          description: 成功したら登録したメールアドレスにメールを飛ばす
+        '400':
+          description: 登録エラー
+  /register_completion:
+    get:
+      tags:
+        - Register
+      summary: ユーザー登録完了
+      parameters:
+        - name: token
+          in: query
+          description: メールアドレスに添付されたトークン
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ユーザー登録を完了する。register_statusをcomleteにする
   /login:
     post:
       tags:
         - Login
-      summary: Login user.
+      summary: ユーザーログイン
       requestBody:
-        description: Information to login user.
+        description: メールアドレスとパスワード一致で認証
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/LoginUser'
-            example:
-              email: 'abc@example.com'
-              password: 'password'
       responses:
         '200':
-          description: Login succeed.
-        '401':
-          description: Unauthorized.
+          description: ログイン成功
+        '400':
+          description: ログイン失敗
   /users/{user_id}/todos:
     # TODO: add bearer auth
     get:
       tags:
         - Todos
-      summary: List of user's todos.
+      summary: Todo一覧
       parameters:
         - name: user_id
           in: path
-          description: User's id
+          description: ユーザーID
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Array of todos.
+          description: ログイン中のユーザーのTodoを全て返す
           content:
             application/json:
               schema:
@@ -73,7 +81,7 @@ paths:
     post:
       tags:
         - Todos
-      summary: Create a new todo
+      summary: Todo新規作成
       parameters:
         - name: user_id
           in: path
@@ -99,23 +107,23 @@ paths:
     get:
       tags:
         - Todos
-      summary: User's todo details
+      summary: Todo詳細
       parameters:
         - name: user_id
           in: path
-          description: User's id
+          description: ユーザーID
           required: true
           schema:
             type: integer
         - name: id
           in: path
-          description: Todo's id
+          description: TodoのID
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Object of todo.
+          description: ログイン中のユーザーのTodoを1件返す
           content:
             application/json:
               schema:
@@ -123,63 +131,63 @@ paths:
     put:
       tags:
         - Todos
-      summary: Update a todo
+      summary: Todoの情報を変更
       parameters:
         - name: user_id
           in: path
-          description: User's id
+          description: ユーザーID
           required: true
           schema:
             type: integer
         - name: id
           in: path
-          description: Todo's id
+          description: TodoのID
           required: true
           schema:
             type: integer
       requestBody:
-        description: Information to create a new todo. 空が送られたら更新しない
+        description: Todoの情報を更新する。空が送られたらその値は更新しない
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Todo'
       responses:
         '201':
-          description: Update todo succeed.
+          description: 成功レスポンス。Todoの情報を更新する
     delete:
       tags:
         - Todos
-      summary: Delete a todo
+      summary: Todoを削除
       parameters:
         - name: user_id
           in: path
-          description: User's id
+          description: ユーザーID
           required: true
           schema:
             type: integer
         - name: id
           in: path
-          description: Todo's id
+          description: TodoのID
           required: true
           schema:
             type: integer
       responses:
         '201':
-          description: Delete todo succeed.
+          description: 指定のTodoを削除する
   /users/{user_id}:
     put:
       tags:
         - Users
-      summary: Rename user.
+      summary: ユーザー名変更
       parameters:
         - name: user_id
           in: path
-          description: User's id
+          description: ユーザーID
           required: true
           schema:
             type: integer
       requestBody:
-        description: Able to request only name for this path
+        description: 変更したいユーザー名
         content:
           application/json:
             schema:
@@ -191,21 +199,21 @@ paths:
                   type: string
       responses:
         '200':
-          description: Rename succeed.
+          description: ユーザー名変更成功
   /users/{user_id}/password_update:
     put:
       tags:
         - Users
-      summary: Change password
+      summary: パスワード更新（現在のパスワードを覚えている場合）
       parameters:
         - name: user_id
           in: path
-          description: User's id
+          description: ユーザーID
           required: true
           schema:
             type: integer
       requestBody:
-        description: Information to change password
+        description: 現在のパスワード、新しいパスワード、確認用新しいパスワードをリクエスト
         content:
           application/json:
             schema:
@@ -222,45 +230,45 @@ paths:
                 password_confirm:
                   type: string
       responses:
-        '201':
-          description: Change password succeed.
+        '200':
+          description: パスワード更新成功
         '400':
           description: Password confirmation is diffrent from password
   /users/{user_id}/password/forgot:
     post:
       tags:
         - Users
-      summary: Reset password if forgot
+      summary: パスワード更新（現在のパスワードを忘れた場合）
       parameters:
         - name: user_id
           in: path
-          description: User's id
+          description: ユーザーID
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Sent password reset mail
+          description: 登録しているメールアドレスにパスワード変更用URLを添付したメールを送信
   /users/{user_id}/password/reset:
     post:
       tags:
         - Users
-      summary: Reset password if forgot
+      summary: パスワード更新完了（現在のメールアドレスを忘れた場合）
       parameters:
         - name: user_id
           in: path
-          description: User's id
+          description: ユーザーID
           required: true
           schema:
             type: integer
         - name: token
           in: query
-          description: reset token
+          description: メールアドレスに添付されたトークンをリクエスト
           required: true
           schema:
             type: string
       requestBody:
-        description: New password
+        description: 新しいパスワードをリクエスト
         content:
           application/json:
             schema:
