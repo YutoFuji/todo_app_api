@@ -20,7 +20,8 @@ class Api::UsersController < ApplicationController
 
   def email_confirm
     user = User.find_by(register_token: params["token"])
-    unless user.register_token_valid?
+
+    unless user && user.register_token_valid?
       raise ActionController::BadRequest
     end
     user.complete!
