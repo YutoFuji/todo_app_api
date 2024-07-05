@@ -3,54 +3,45 @@ class Api::UsersController < ApplicationController
 
   def create
     unless password_confirm_same?
-      render status: :bad_request
-      return
+      raise ActionController::BadRequest
     end
 
-    @user = User.new(user_params)
-    @user.incomplete!
+    user = User.new(user_params)
+    user.incomplete!
 
-    if @user.save
-      ActiveRecord::Base.transaction do
-        @user.generate_register_token
-        send_email(@user)
-      end
-      render json: @user, status: :ok
-    else
-      # TODO: エラーハンドリングまとめて適用
-      render status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      user.save!
+      user.generate_register_token
+      send_email(user)
     end
+
+    render json: user, status: :ok
   end
 
   def email_confirm
     user = User.find_by(register_token: params["token"])
-    if user && user.register_token_valid?
-      user.complete!
-      render status: :ok
-    else
-      render status: :bad_request
+    unless user.register_token_valid?
+      raise ActionController::BadRequest
     end
+    user.complete!
+
+    render json: user, status: :ok
   end
 
   def update
-    if current_user.update(name: params["name"])
-      render status: :ok
-    else
-      render status: :bad_request
-    end
+    current_user.update!(name: params["name"])
+
+    render json: current_user
   end
 
   def update_password
     unless password_valid?
-      render status: :bad_request
-      return
+      raise ActionController::BadRequest
     end
 
-    if current_user.update!(password: params["password"])
-      render status: :ok
-    else
-      render status: :bad_request
-    end
+    current_user.update!(password: params["password"])
+
+    render json: current_user
   end
 
   private

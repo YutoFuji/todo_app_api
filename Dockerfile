@@ -10,6 +10,7 @@ RUN gem install bundler && bundle install
 COPY ./src /app
 
 RUN apt-get update && \
-    apt-get install -y nodejs
+    apt-get install -y nodejs && \
+    apt-get install -y vim
 
 RUN bundle install
