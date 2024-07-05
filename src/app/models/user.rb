@@ -2,7 +2,10 @@ class User < ApplicationRecord
   has_secure_password
   has_many :todos, dependent: :destroy
 
-  enum register_status: { incomplete: "incomplete", complete: "complete" }
+  enum register_status: {
+    incomplete: "incomplete",
+    complete: "complete",
+  }
 
   def generate_register_token
     self.register_token = generate_token
