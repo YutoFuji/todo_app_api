@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "users#index"
 
+  # メール送信テスト（開発環境のみ有効）
+  # http://localhost:8888/letter_opener
+  mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
+
   namespace "api" do
     post "register", to: "users#create"
     get "register_completion", to: "users#email_confirm"
