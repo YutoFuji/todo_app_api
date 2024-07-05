@@ -15,7 +15,7 @@ class Api::UsersController < ApplicationController
       send_email(user)
     end
 
-    render json: user, status: :ok
+    render json: user, serializer: UserSerializer
   end
 
   def email_confirm
@@ -26,13 +26,13 @@ class Api::UsersController < ApplicationController
     end
     user.complete!
 
-    render json: user, status: :ok
+    render json: user, serializer: UserSerializer
   end
 
   def update
     current_user.update!(name: params["name"])
 
-    render json: current_user
+    render json: current_user, serializer: UserSerializer
   end
 
   def update_password
@@ -42,7 +42,7 @@ class Api::UsersController < ApplicationController
 
     current_user.update!(password: params["password"])
 
-    render json: current_user
+    render json: current_user, serializer: UserSerializer
   end
 
   private

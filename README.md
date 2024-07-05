@@ -13,13 +13,23 @@ docker-compose up -d
 
 http://localhost:8888
 
+# 下準備
+
+```
+docker-compose run --rm rails bundle install
+```
+
+```
+docker-compose build
+```
+
+データベースを作成します。
+
+```
+docker-compose run --rm rails bundle exec rails db:create
+```
+
 # マイグレーション
-
-データベース作成します。
-
-```
-docker-compose run --rm rails bundle exec db:create
-```
 
 このプロジェクトではマイグレーションにridgepoleを使用しています。
 

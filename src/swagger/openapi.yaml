@@ -23,6 +23,10 @@ paths:
       responses:
         '200':
           description: 成功したら登録したメールアドレスにメールを飛ばす
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
         '400':
           description: 登録エラー
   /register_completion:
@@ -40,6 +44,10 @@ paths:
       responses:
         '200':
           description: ユーザー登録を完了する。register_statusをcomleteにする
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
   /login:
     post:
       tags:
@@ -54,6 +62,10 @@ paths:
       responses:
         '200':
           description: ログイン成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
         '400':
           description: ログイン失敗
   /users/{user_id}/todos:
@@ -200,6 +212,10 @@ paths:
       responses:
         '200':
           description: ユーザー名変更成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
   /users/{user_id}/password_update:
     put:
       tags:
@@ -232,6 +248,10 @@ paths:
       responses:
         '200':
           description: パスワード更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
         '400':
           description: Password confirmation is diffrent from password
   /users/{user_id}/password/forgot:
@@ -280,7 +300,11 @@ paths:
                   type: string
       responses:
         '200':
-          description: Sent password reset mail
+          description: パスワード変更完了
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
 
 components:
   securitySchemes:
@@ -352,4 +376,16 @@ components:
         created_at:
           type: string
         update_at:
+          type: string
+    User:
+      type: object
+      description: ユーザーの情報
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        register_status:
           type: string
