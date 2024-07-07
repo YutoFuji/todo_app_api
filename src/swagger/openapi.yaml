@@ -65,7 +65,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/User'
+                type: object
+                properties:
+                  token:
+                    type: string
         '400':
           description: ログイン失敗
   /users/{user_id}/todos:
