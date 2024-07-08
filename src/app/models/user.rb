@@ -20,6 +20,11 @@ class User < ApplicationRecord
     (self.register_token_sent_at + 1.hour) > Time.zone.now
   end
 
+  def remove_register_token
+    self.register_token = nil
+    save!
+  end
+
   def current_password?(current_password)
     authenticate(current_password).present?
   end
