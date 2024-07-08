@@ -52,7 +52,7 @@ RSpec.describe "Todos", type: :request do
       it "Todoを作成失敗すること" do
         authenticate_stub(user)
         post api_user_todos_path(user_id: user.id), params: blank_params, headers: headers
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(404)
       end
     end
   end

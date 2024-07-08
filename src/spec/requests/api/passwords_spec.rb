@@ -17,11 +17,12 @@ RSpec.describe "Passwords", type: :request do
 
   describe "POST /users/{user_id}/password/reset" do
     let(:reset_token) { SecureRandom.alphanumeric(10) }
+    let(:new_password) { "vwxz9876" }
     let(:user) { create(:user, password_reset_token: reset_token, password_reset_token_sent_at: (Time.zone.now - 10.minutes)) }
     let(:params) do
       {
         "token": reset_token,
-        "password": "new_password"
+        "password": new_password
       }
     end
     it "処理できること" do
@@ -33,7 +34,7 @@ RSpec.describe "Passwords", type: :request do
       let(:invalid_params) do
         {
           "token": invalid_token,
-          "password": "new_password"
+          "password": new_password
         }
       end
       it "エラーになること" do

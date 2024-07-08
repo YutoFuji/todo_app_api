@@ -28,6 +28,7 @@ config/initializers/secret_token.rb
 # TODO Comment out these rules if environment variables can be committed
 .env
 .env*.local
+.env*
 
 ## Environment normalization:
 /.bundle
