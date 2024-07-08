@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
+  let(:email){ "abc@example.com" }
+  let(:password) { "abcd1234" }
   describe "POST /register" do
-    let(:email){ "abc@example.com" }
     before do
       allow(RegisterMailer).to receive_message_chain(:register, :deliver_now)
     end
@@ -11,8 +12,8 @@ RSpec.describe "Users", type: :request do
       {
         "name": "name",
         "email": email,
-        "password": "password",
-        "password_confirm": "password"
+        "password": password,
+        "password_confirm": password
       }
     end
     it "新規会員登録メールが送信されること" do
@@ -30,8 +31,8 @@ RSpec.describe "Users", type: :request do
         {
           "name": "name",
           "email": email,
-          "password": "password",
-          "password_confirm": "different_password"
+          "password": password,
+          "password_confirm": "bcde1234"
         }
       end
       it "エラーが返されること" do
@@ -63,7 +64,7 @@ RSpec.describe "Users", type: :request do
       end
       it "エラーが返ること" do
         get api_register_completion_path, params: params, headers: headers
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(404)
       end
     end
   end
@@ -92,25 +93,26 @@ RSpec.describe "Users", type: :request do
 
   describe "PUT /users/{user_id}/password_update" do
     let!(:user) { create(:user) }
+    let(:new_password) { "wxyz9876" }
     let(:params) do
       {
-        "current_password": "password",
-        "password": "new_password",
-        "password_confirm": "new_password"
+        "current_password": password,
+        "password": new_password,
+        "password_confirm": new_password
       }
     end
     it "パスワードを変更できること" do
       authenticate_stub(user)
       expect do
         put api_user_password_update_path(user_id: user.id), params: params, headers: headers
-      end.to change { user.reload.password }.from("password").to("new_password")
+      end.to change { user.reload.password }.from(password).to(new_password)
     end
     context "確認パスワードが異なっていたとき" do
       let(:invalid_params) do
         {
-          "current_password": "password",
-          "password": "new_password",
-          "password_confirm": "different_password"
+          "current_password": password,
+          "password": new_password,
+          "password_confirm": "vwxy9876"
         }
       end
       it "エラーが起こること" do
@@ -122,9 +124,9 @@ RSpec.describe "Users", type: :request do
     context "入力された現在のパスワードが異なっていたとき" do
       let(:invalid_params) do
         {
-          "current_password": "different_password",
-          "password": "new_password",
-          "password_confirm": "new_password"
+          "current_password": "bcdf2345",
+          "password": new_password,
+          "password_confirm": new_password
         }
       end
       it "エラーが起こること" do

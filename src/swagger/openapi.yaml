@@ -28,7 +28,9 @@ paths:
               schema:
                 $ref: '#/components/responses/User'
         '400':
-          description: 登録エラー
+          description: パスワード、確認用パスワードが違った時エラー
+        '404':
+          description: ユーザー登録時エラー
   /register_completion:
     get:
       tags:
@@ -48,6 +50,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/User'
+        '400':
+          description: "入力されたパスワードが不正のときエラー"
+        '404':
+          description: トークン不正エラー
   /login:
     post:
       tags:
@@ -70,7 +76,9 @@ paths:
                   token:
                     type: string
         '400':
-          description: ログイン失敗
+          description: メールアドレス未認証、ログイン失敗時エラー
+        '404':
+          description: リクエストされたメールアドレスが存在しないエラー
   /users/{user_id}/todos:
     # TODO: add bearer auth
     get:

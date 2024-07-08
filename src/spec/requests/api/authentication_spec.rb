@@ -9,9 +9,10 @@ RSpec.describe "Authentications", type: :request do
         password: user.password
       }
     end
-    it "ログインできること" do
+    it "トークンが返ってくること" do
       post api_login_path, params: params, headers: headers
       expect(response).to have_http_status(200)
+      expect(json_response["token"]).to be_present
     end
     context "パスワードが違っているとき" do
       let(:uncorrect_password) { SecureRandom.alphanumeric(10) }
