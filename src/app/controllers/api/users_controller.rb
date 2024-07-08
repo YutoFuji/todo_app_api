@@ -19,14 +19,18 @@ class Api::UsersController < ApplicationController
   end
 
   def email_confirm
-    user = User.find_by!(register_token: params["token"])
+    @user = User.find_by!(register_token: params["token"])
 
-    unless user.register_token_valid?
+    unless @user.register_token_valid?
       raise ActionController::BadRequest
     end
-    user.complete!
+    @user.complete!
+    @user.remove_register_token
 
-    render json: user, serializer: UserSerializer
+    # TODO: パラメータをつける（フロントで出しわけするため）
+    login_url = "http://localhost:3000/login"
+
+    redirect_to login_url
   end
 
   def update
