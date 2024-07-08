@@ -118,14 +118,15 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Todo'
-              example:
-                - id: 1
-                  title: 'Title1'
-                  status: 'Status1'
-                  target_completion_date: 'YYYY-MM-DD'
       responses:
-        '201':
-          description: Create todo succeed.
+        '200':
+          description: Todo新規作成成功レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/Todo'
+        '404':
+          description: Todo新規作成エラー
   /users/{user_id}/todos/{id}:
     get:
       tags:
@@ -175,8 +176,14 @@ paths:
             schema:
               $ref: '#/components/schemas/Todo'
       responses:
-        '201':
+        '200':
           description: 成功レスポンス。Todoの情報を更新する
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/Todo'
+        '404':
+          description: Todo更新エラー
     delete:
       tags:
         - Todos
@@ -195,7 +202,7 @@ paths:
           schema:
             type: integer
       responses:
-        '201':
+        '200':
           description: 指定のTodoを削除する
   /users/{user_id}:
     put:
@@ -227,6 +234,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/User'
+        '404':
+          description: 名前更新エラー
   /users/{user_id}/password_update:
     put:
       tags:
@@ -264,7 +273,9 @@ paths:
               schema:
                 $ref: '#/components/responses/User'
         '400':
-          description: Password confirmation is diffrent from password
+          description: パスワードが有効でなかった時エラー
+        '404':
+          description: パスワード更新エラー
   /users/{user_id}/password/forgot:
     post:
       tags:
@@ -280,11 +291,13 @@ paths:
       responses:
         '200':
           description: 登録しているメールアドレスにパスワード変更用URLを添付したメールを送信
+        '404':
+          description: メールアドレスが登録されていなかったときエラー
   /users/{user_id}/password/reset:
     post:
       tags:
         - Users
-      summary: パスワード更新完了（現在のメールアドレスを忘れた場合）
+      summary: パスワード更新完了（現在のパスワードを忘れた場合）
       parameters:
         - name: user_id
           in: path
@@ -316,6 +329,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/User'
+        '404':
+          description: トークンが不正の時エラー、パスワード更新エラー
 
 components:
   securitySchemes:

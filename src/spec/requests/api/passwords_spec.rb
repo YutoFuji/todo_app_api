@@ -39,7 +39,7 @@ RSpec.describe "Passwords", type: :request do
       end
       it "エラーになること" do
         post api_user_password_reset_path(user_id: user.id), params: invalid_params, headers: headers
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(404)
       end
     end
   end
