@@ -42,4 +42,31 @@ RSpec.describe "Authentications", type: :request do
       end
     end
   end
+
+  describe "GET /authentication" do
+    let(:reset_token) { SecureRandom.alphanumeric(10) }
+    let(:user) { create(:user, register_token: reset_token, register_token_sent_at: (Time.zone.now - 10.minutes)) }
+    let(:params) do
+      {
+        "token": reset_token
+      }
+    end
+    it "登録状況が更新されていること" do
+      expect do
+        get api_authentication_path, params: params, headers: headers
+      end.to change { User.find(user.id)&.register_status }.from("incomplete").to("complete")
+    end
+    context "トークンが異なっているとき" do
+      let(:invalid_token) { SecureRandom.alphanumeric(10) }
+      let(:invalid_params) do
+        {
+          "token": invalid_token
+        }
+      end
+      it "エラーが返ること" do
+        get api_authentication_path, params: params, headers: headers
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end

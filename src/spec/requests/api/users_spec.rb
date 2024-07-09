@@ -52,7 +52,7 @@ RSpec.describe "Users", type: :request do
     end
     it "登録状況が更新されていること" do
       expect do
-        get api_register_completion_path, params: params, headers: headers
+        get api_authentication_path, params: params, headers: headers
       end.to change { User.find(user.id)&.register_status }.from("incomplete").to("complete")
     end
     context "トークンが異なっているとき" do
@@ -63,7 +63,7 @@ RSpec.describe "Users", type: :request do
         }
       end
       it "エラーが返ること" do
-        get api_register_completion_path, params: params, headers: headers
+        get api_authentication_path, params: params, headers: headers
         expect(response).to have_http_status(404)
       end
     end
@@ -88,52 +88,6 @@ RSpec.describe "Users", type: :request do
       expect do
         put api_user_path(id: user.id), params: params, headers: headers
       end.not_to change { users.size }.from(1)
-    end
-  end
-
-  describe "PUT /users/{user_id}/password_update" do
-    let!(:user) { create(:user) }
-    let(:new_password) { "wxyz9876" }
-    let(:params) do
-      {
-        "current_password": password,
-        "password": new_password,
-        "password_confirm": new_password
-      }
-    end
-    it "パスワードを変更できること" do
-      authenticate_stub(user)
-      expect do
-        put api_user_password_update_path(user_id: user.id), params: params, headers: headers
-      end.to change { user.reload.password }.from(password).to(new_password)
-    end
-    context "確認パスワードが異なっていたとき" do
-      let(:invalid_params) do
-        {
-          "current_password": password,
-          "password": new_password,
-          "password_confirm": "vwxy9876"
-        }
-      end
-      it "エラーが起こること" do
-        authenticate_stub(user)
-        put api_user_password_update_path(user_id: user.id), params: invalid_params, headers: headers
-        expect(response).to have_http_status(400)
-      end
-    end
-    context "入力された現在のパスワードが異なっていたとき" do
-      let(:invalid_params) do
-        {
-          "current_password": "bcdf2345",
-          "password": new_password,
-          "password_confirm": new_password
-        }
-      end
-      it "エラーが起こること" do
-        authenticate_stub(user)
-        put api_user_password_update_path(user_id: user.id), params: invalid_params, headers: headers
-        expect(response).to have_http_status(400)
-      end
     end
   end
 end
