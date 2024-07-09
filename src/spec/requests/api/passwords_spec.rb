@@ -6,65 +6,48 @@ RSpec.describe "Passwords", type: :request do
     allow(PasswordResetMailer).to receive_message_chain(:password_reset, :deliver_now)
   end
 
-  describe "POST /password/reset" do
+  describe "PUT /users/{user_id}/password" do
+    let!(:user) { create(:user) }
+    let(:new_password) { "wxyz9876" }
     let(:params) do
       {
-        "email": user.email
+        "current_password": user.password,
+        "password": new_password,
+        "password_confirm": new_password
       }
     end
-    it "正常にメールが送信されていること" do
-      post api_password_reset_path, params: params, headers: headers
-      expect(response).to have_http_status(200)
-      expect(PasswordResetMailer.password_reset).to have_received(:deliver_now).once
-    end
-    context "メールアドレスが登録されていなかったとき" do
-      let(:invalid_email) { "wxyz@example.com" }
-      let(:invalid_params) do
-        {
-          "email": invalid_email
-        }
-      end
-      it "エラーが返ること" do
-        post api_password_reset_path, params: invalid_params, headers: headers
-        expect(response).to have_http_status(404)
-      end
-    end
-  end
-
-  describe "POST /users/{user_id}/password/forgot" do
-    it "正常にメールが送信されていること" do
+    it "パスワードを変更できること" do
       authenticate_stub(user)
-      post api_user_password_forgot_path(user_id: user.id), headers: headers
-      expect(response).to have_http_status(200)
-      expect(PasswordResetMailer.password_reset).to have_received(:deliver_now).once
+      expect do
+        put api_user_password_path(user_id: user.id), params: params, headers: headers
+      end.to change { user.reload.password }.from(user.password).to(new_password)
     end
-  end
-
-  describe "POST /users/{user_id}/password/reset" do
-    let(:reset_token) { SecureRandom.alphanumeric(10) }
-    let(:new_password) { "vwxz9876" }
-    let(:user) { create(:user, password_reset_token: reset_token, password_reset_token_sent_at: (Time.zone.now - 10.minutes)) }
-    let(:params) do
-      {
-        "token": reset_token,
-        "password": new_password
-      }
-    end
-    it "処理できること" do
-      post api_user_password_reset_path(user_id: user.id), params: params, headers: headers
-      expect(response).to have_http_status(200)
-    end
-    context "リセットトークンが異なっていたとき" do
-      let(:invalid_token) { SecureRandom.alphanumeric(10) }
+    context "確認パスワードが異なっていたとき" do
       let(:invalid_params) do
         {
-          "token": invalid_token,
-          "password": new_password
+          "current_password": user.password,
+          "password": new_password,
+          "password_confirm": "vwxy9876"
         }
       end
-      it "エラーになること" do
-        post api_user_password_reset_path(user_id: user.id), params: invalid_params, headers: headers
-        expect(response).to have_http_status(404)
+      it "エラーが起こること" do
+        authenticate_stub(user)
+        put api_user_password_path(user_id: user.id), params: invalid_params, headers: headers
+        expect(response).to have_http_status(400)
+      end
+    end
+    context "入力された現在のパスワードが異なっていたとき" do
+      let(:invalid_params) do
+        {
+          "current_password": "bcdf2345",
+          "password": new_password,
+          "password_confirm": new_password
+        }
+      end
+      it "エラーが起こること" do
+        authenticate_stub(user)
+        put api_user_password_path(user_id: user.id), params: invalid_params, headers: headers
+        expect(response).to have_http_status(400)
       end
     end
   end

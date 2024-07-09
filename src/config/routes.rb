@@ -12,20 +12,17 @@ Rails.application.routes.draw do
   # http://localhost:8888/letter_opener
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
-  namespace "api" do
-    post "register", to: "users#create"
-    get "register_completion", to: "users#email_confirm"
-    post "login", to: "authentication#login"
-    namespace "password" do
-      post "reset", to: "passwords#create_by_email"
+  namespace :api do
+    post :register, to: "users#create", path_names: { create: "register" }
+    post :login, to: "authentications#create", path_names: { create: "login" }
+    resource :authentication, only: %i[show]
+    namespace :password do
+      resource :forgot, only: %i[create]
+      resource :reset, only: %i[create update]
     end
-    resources :users, only: [:update] do
+    resources :users, only: %i[update] do
       resources :todos
-      put "password_update", to: "users#update_password"
-      namespace "password" do
-        post "forgot", to: "passwords#forgot"
-        post "reset", to: "passwords#reset"
-      end
+      resource :password, only: %i[update]
     end
   end
 end
