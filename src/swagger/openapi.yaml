@@ -31,7 +31,7 @@ paths:
           description: パスワード、確認用パスワードが違った時エラー
         '404':
           description: ユーザー登録時エラー
-  /register_completion:
+  /authentication:
     get:
       tags:
         - Register
@@ -236,7 +236,7 @@ paths:
                 $ref: '#/components/responses/User'
         '404':
           description: 名前更新エラー
-  /users/{user_id}/password_update:
+  /users/{user_id}/password:
     put:
       tags:
         - Users
@@ -276,25 +276,38 @@ paths:
           description: パスワードが有効でなかった時エラー
         '404':
           description: パスワード更新エラー
-  /users/{user_id}/password/forgot:
+  /password/forgot:
     post:
       tags:
         - Users
       summary: パスワード更新（現在のパスワードを忘れた場合）
-      parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: 登録しているメールアドレスにパスワード変更用URLを添付したメールを送信
         '404':
           description: メールアドレスが登録されていなかったときエラー
-  /users/{user_id}/password/reset:
+  /password/reset:
     post:
+      tags:
+        - Users
+      summary: パスワード変更（ログイン前）
+      requestBody:
+        description: メールアドレスをリクエストし、そのアドレス宛に再設定メールを送る
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: メール送信
+        '404':
+          description: 入力されたメールアドレスが存在していなかった場合
+    put:
       tags:
         - Users
       summary: パスワード更新完了（現在のパスワードを忘れた場合）
@@ -331,16 +344,6 @@ paths:
                 $ref: '#/components/responses/User'
         '404':
           description: トークンが不正の時エラー、パスワード更新エラー
-  /password/reset:
-    post:
-      tags:
-        - Login
-      summary: パスワード更新（ログイン前）
-      responses:
-        '200':
-          description: 入力されたメールアドレスにパスワード変更用URLを添付したメールを送信
-        '404':
-          description: 入力されたメールアドレスが登録されていなかったときエラー
 
 components:
   securitySchemes:
