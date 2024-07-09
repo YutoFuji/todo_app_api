@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     resource :authentication, only: %i[show]
     namespace :password do
       resource :forgot, only: %i[create]
-      resource :reset, only: %i[create update]
+      resource :reset, only: %i[create show update]
     end
     resources :users, only: %i[update] do
       resources :todos

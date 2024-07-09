@@ -6,8 +6,8 @@ class Api::Password::ResetsController < Api::PasswordsController
   end
 
   def update
-    user = User.find_by!(password_reset_token: params["token"])
-    if user.password_reset_token_valid?
+    User.find_by!(password_reset_token: params["token"])
+    if password_confirm_same?
       user.reset_password(params["password"])
     end
 
