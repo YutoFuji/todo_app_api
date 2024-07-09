@@ -39,4 +39,12 @@ class ApplicationController < ActionController::API
   def secret_key
     Rails.application.credentials.secret_key_base
   end
+
+  def password_valid?
+    password_confirm_same? && current_password_valid?
+  end
+
+  def password_confirm_same?
+    params["password"] == params["password_confirm"]
+  end
 end
