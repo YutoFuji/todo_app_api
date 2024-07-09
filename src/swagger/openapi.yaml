@@ -331,6 +331,16 @@ paths:
                 $ref: '#/components/responses/User'
         '404':
           description: トークンが不正の時エラー、パスワード更新エラー
+  /password/reset:
+    post:
+      tags:
+        - Login
+      summary: パスワード更新（ログイン前）
+      responses:
+        '200':
+          description: 入力されたメールアドレスにパスワード変更用URLを添付したメールを送信
+        '404':
+          description: 入力されたメールアドレスが登録されていなかったときエラー
 
 components:
   securitySchemes:
