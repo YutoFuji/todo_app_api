@@ -3,14 +3,17 @@ class Api::Password::PasswordsController < ApplicationController
 
   def forgot
     if current_user.email
-      ActiveRecord::Base.transaction do
-        current_user.generate_password_reset_token
-        send_email(current_user)
-      end
+      handle_reset_token(current_user)
       render status: :ok
     else
       render status: :not_found
     end
+  end
+
+  def create_by_email
+    user = User.find_by!(email: params["email"])
+    handle_reset_token(user)
+    render status: :ok
   end
 
   def reset
@@ -23,6 +26,13 @@ class Api::Password::PasswordsController < ApplicationController
   end
 
   private
+
+  def handle_reset_token(user)
+    ActiveRecord::Base.transaction do
+      user.generate_password_reset_token
+      send_email(user)
+    end
+  end
 
   def send_email(user)
     PasswordResetMailer.password_reset(user, user.email).deliver_now

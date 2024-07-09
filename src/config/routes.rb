@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     post "register", to: "users#create"
     get "register_completion", to: "users#email_confirm"
     post "login", to: "authentication#login"
+    namespace "password" do
+      post "reset", to: "passwords#create_by_email"
+    end
     resources :users, only: [:update] do
       resources :todos
       put "password_update", to: "users#update_password"
