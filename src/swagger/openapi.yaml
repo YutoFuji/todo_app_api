@@ -6,6 +6,7 @@ info:
 tags:
   - name: Register
   - name: Login
+  - name: Mypage
   - name: Users
   - name: Todos
 paths:
@@ -31,7 +32,7 @@ paths:
           description: パスワード、確認用パスワードが違った時エラー
         '404':
           description: ユーザー登録時エラー
-  /register_completion:
+  /authentiction:
     get:
       tags:
         - Register
@@ -79,19 +80,12 @@ paths:
           description: メールアドレス未認証、ログイン失敗時エラー
         '404':
           description: リクエストされたメールアドレスが存在しないエラー
-  /users/{user_id}/todos:
+  /users/todos:
     # TODO: add bearer auth
     get:
       tags:
         - Todos
       summary: Todo一覧
-      parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
           description: ログイン中のユーザーのTodoを全て返す
@@ -127,7 +121,7 @@ paths:
                 $ref: '#/components/responses/Todo'
         '404':
           description: Todo新規作成エラー
-  /users/{user_id}/todos/{id}:
+  /users/todos/{id}:
     get:
       tags:
         - Todos
@@ -204,18 +198,11 @@ paths:
       responses:
         '200':
           description: 指定のTodoを削除する
-  /users/{user_id}:
+  /profile:
     put:
       tags:
-        - Users
+        - Mypage
       summary: ユーザー名変更
-      parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
       requestBody:
         description: 変更したいユーザー名
         content:
@@ -236,18 +223,20 @@ paths:
                 $ref: '#/components/responses/User'
         '404':
           description: 名前更新エラー
-  /users/{user_id}/password_update:
+  /profile/password:
+    post:
+      tags:
+        - Mypage
+      summary: パスワード更新（現在のパスワードを忘れた場合）
+      responses:
+        '200':
+          description: 登録しているメールアドレスにパスワード変更用URLを添付したメールを送信
+        '404':
+          description: メールアドレスが登録されていなかったときエラー
     put:
       tags:
-        - Users
+        - Mypage
       summary: パスワード更新（現在のパスワードを覚えている場合）
-      parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
       requestBody:
         description: 現在のパスワード、新しいパスワード、確認用新しいパスワードをリクエスト
         content:
@@ -276,35 +265,12 @@ paths:
           description: パスワードが有効でなかった時エラー
         '404':
           description: パスワード更新エラー
-  /users/{user_id}/password/forgot:
+  /profile/password/reset:
     post:
       tags:
-        - Users
-      summary: パスワード更新（現在のパスワードを忘れた場合）
-      parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: 登録しているメールアドレスにパスワード変更用URLを添付したメールを送信
-        '404':
-          description: メールアドレスが登録されていなかったときエラー
-  /users/{user_id}/password/reset:
-    post:
-      tags:
-        - Users
+        - Mypage
       summary: パスワード更新完了（現在のパスワードを忘れた場合）
       parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
         - name: token
           in: query
           description: メールアドレスに添付されたトークンをリクエスト

@@ -42,7 +42,7 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "GET /register_completion" do
+  describe "GET /authentication" do
     let(:reset_token) { SecureRandom.alphanumeric(10) }
     let(:user) { create(:user, register_token: reset_token, register_token_sent_at: (Time.zone.now - 10.minutes)) }
     let(:params) do
@@ -66,28 +66,6 @@ RSpec.describe "Users", type: :request do
         get api_authentication_path, params: params, headers: headers
         expect(response).to have_http_status(404)
       end
-    end
-  end
-
-  describe "PUT /users/{user_id}" do
-    let!(:user) { create(:user) }
-    let(:params) do
-      {
-        "name": "changed_name"
-      }
-    end
-    it "名前を変更できること" do
-      authenticate_stub(user)
-      expect do
-        put api_user_path(id: user.id), params: params, headers: headers
-      end.to change { user.reload.name }.from("testuser1").to("changed_name")
-    end
-    it "データが増えていないこと" do
-      authenticate_stub(user)
-      users = User.all
-      expect do
-        put api_user_path(id: user.id), params: params, headers: headers
-      end.not_to change { users.size }.from(1)
     end
   end
 end

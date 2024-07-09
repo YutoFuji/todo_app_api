@@ -17,12 +17,13 @@ Rails.application.routes.draw do
     post :login, to: "authentications#create", path_names: { create: "login" }
     resource :authentication, only: %i[show]
     namespace :password do
-      resource :forgot, only: %i[create]
       resource :reset, only: %i[create update]
     end
-    resources :users, only: %i[update] do
+    resource :profile, only: %i[update] do
+      resource :password, only: %i[create update]
+    end
+    resource :user do
       resources :todos
-      resource :password, only: %i[update]
     end
   end
 end
