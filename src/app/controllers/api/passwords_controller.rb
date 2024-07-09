@@ -1,5 +1,14 @@
 class Api::PasswordsController < ApplicationController
-  before_action :authenticate_user!, only: %i[update]
+  before_action :authenticate_user!, only: %i[create update]
+
+  def create
+    if current_user.email
+      handle_reset_token(current_user)
+      render status: :ok
+    else
+      render status: :not_found
+    end
+  end
 
   def update
     unless password_valid?
