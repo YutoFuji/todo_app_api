@@ -1,0 +1,15 @@
+name: "Ruby on Rails test CI"
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout and build
+        run: docker-compose up -d
+
+      - name: Migration
+        run: docker-compose exec rails rails ridgepole:apply -c config/database.yml -f db/Schemafile
+
+      - name: Test
+        run: docker-compose exec rails bundle exec rspec
