@@ -8,8 +8,17 @@ jobs:
       - name: Checkout and build
         run: docker-compose up -d
 
+      - name: bundle install
+        run: docker-compose run --rm rails bundle install
+
+      - name: Build
+        run: docker-compose build
+
+      - name: Create database
+        run: docker-compose run --rm rails bundle exec rails db:create
+
       - name: Migration
-        run: docker-compose exec -T rails rails ridgepole:apply -c src/config/database.yml -f src/db/Schemafile
+        run: docker-compose run --rm rails bundle exec ridgepole -c config/database.yml --apply -f db/Schemafile
 
       - name: Test
         run: docker-compose exec rails bundle exec rspec
