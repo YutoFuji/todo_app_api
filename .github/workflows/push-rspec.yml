@@ -21,4 +21,4 @@ jobs:
         run: docker-compose run --rm rails bundle exec ridgepole -c config/database.yml --apply -f db/Schemafile
 
       - name: Test
-        run: docker-compose exec rails bundle exec rspec
+        run: docker-compose exec -T rails bundle exec rspec
