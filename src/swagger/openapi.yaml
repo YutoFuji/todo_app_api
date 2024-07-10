@@ -80,7 +80,7 @@ paths:
           description: メールアドレス未認証、ログイン失敗時エラー
         '404':
           description: リクエストされたメールアドレスが存在しないエラー
-  /users/todos:
+  /user/todos:
     # TODO: add bearer auth
     get:
       tags:
@@ -99,13 +99,6 @@ paths:
       tags:
         - Todos
       summary: Todo新規作成
-      parameters:
-        - name: user_id
-          in: path
-          description: User's id
-          required: true
-          schema:
-            type: integer
       requestBody:
         description: Information to create a new todo
         content:
@@ -121,18 +114,12 @@ paths:
                 $ref: '#/components/responses/Todo'
         '404':
           description: Todo新規作成エラー
-  /users/todos/{id}:
+  /user/todos/{id}:
     get:
       tags:
         - Todos
       summary: Todo詳細
       parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
         - name: id
           in: path
           description: TodoのID
@@ -151,12 +138,6 @@ paths:
         - Todos
       summary: Todoの情報を変更
       parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
         - name: id
           in: path
           description: TodoのID
@@ -183,12 +164,6 @@ paths:
         - Todos
       summary: Todoを削除
       parameters:
-        - name: user_id
-          in: path
-          description: ユーザーID
-          required: true
-          schema:
-            type: integer
         - name: id
           in: path
           description: TodoのID
