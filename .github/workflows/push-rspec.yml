@@ -18,7 +18,7 @@ jobs:
         run: docker-compose run --rm rails bundle exec rails db:create
 
       - name: Migration
-        run: docker-compose run --rm rails bundle exec ridgepole -c config/database.yml --apply -f db/Schemafile
+        run: docker-compose run --rm rails bundle exec ridgepole -c config/database.yml --apply -f db/Schemafile -E test
 
       - name: Test
         run: docker-compose exec -T rails bundle exec rspec
