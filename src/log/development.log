@@ -1,5 +1,0 @@
-  [1m[35m (12.6ms)[0m  [1m[35mCREATE DATABASE `rails_todo_api` DEFAULT CHARACTER SET `utf8mb4`[0m
-  [1m[35m (6.1ms)[0m  [1m[35mCREATE DATABASE `rails_todo_api_test` DEFAULT CHARACTER SET `utf8mb4`[0m
-  [1m[35m (34.3ms)[0m  [1m[35mDROP DATABASE IF EXISTS `rails_todo_api_test`[0m
-  [1m[35m (5.1ms)[0m  [1m[35mCREATE DATABASE `rails_todo_api_dev` DEFAULT CHARACTER SET `utf8mb4`[0m
-  [1m[35m (5.4ms)[0m  [1m[35mCREATE DATABASE `rails_todo_api_test` DEFAULT CHARACTER SET `utf8mb4`[0m
