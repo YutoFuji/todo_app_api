@@ -1,0 +1,21 @@
+databases:
+  - name: life_goals
+    databaseName: life_goals
+    user: yuto
+    plan: free
+
+services:
+  - type: web
+    name: life_goals
+    runtime: ruby
+    plan: free
+    buildCommand: "./src/bin/render-build.sh"
+    # preDeployCommand: "bundle exec rails db:migrate" # preDeployCommand only available on paid instance types
+    startCommand: "bundle exec rails server"
+    envVars:
+      - key: <%= ENV['DATABASE_URL'] %>
+        fromDatabase:
+          name: mysite
+          property: connectionString
+      - key: <%= ENV['RAILS_MASTER_KEY'] %>
+        sync: false
