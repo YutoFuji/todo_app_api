@@ -22,7 +22,8 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential default-libmysqlclient-dev git libvips pkg-config
 
 # Install application gems
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile ./rails
+COPY Gemfile.lock ./rails
 RUN bundle install
 
 # Copy application code
