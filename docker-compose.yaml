@@ -11,10 +11,11 @@ services:
   rails:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     command: bundle exec rails s -p 8888 -b '0.0.0.0'
     volumes:
-      - './src:/app'
+      - ./src:/app
+      - app_bundle:/usr/local/bundle
     ports:
       - '8888:8888'
     depends_on:
@@ -22,3 +23,4 @@ services:
     tty: true
 volumes:
   db-volume:
+  app_bundle:
