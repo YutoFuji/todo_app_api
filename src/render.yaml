@@ -9,9 +9,9 @@ services:
     name: life_goals
     runtime: ruby
     plan: free
-    buildCommand: "./src/bin/render-build.sh"
+    buildCommand: "./bin/render-build.sh"
     # preDeployCommand: "bundle exec rails db:migrate" # preDeployCommand only available on paid instance types
-    startCommand: "bundle exec puma -C src/config/puma.rb"
+    startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
