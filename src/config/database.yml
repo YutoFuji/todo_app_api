@@ -55,3 +55,4 @@ production:
   database: life_goals
   username: life_goals
   password: DB_PASSWORD
+  url: ENV.fetch["DATABASE_URL"]
