@@ -260,8 +260,11 @@ paths:
               type: object
               required:
                 - password
+                - password_confirm
               properties:
                 password:
+                  type: string
+                password_confirm:
                   type: string
       responses:
         '200':
