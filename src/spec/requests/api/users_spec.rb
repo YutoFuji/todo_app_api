@@ -13,7 +13,6 @@ RSpec.describe "Users", type: :request do
         "name": "name",
         "email": email,
         "password": password,
-        "password_confirm": password
       }
     end
     it "新規会員登録メールが送信されること" do
@@ -25,20 +24,6 @@ RSpec.describe "Users", type: :request do
       expect do
         post api_register_path, params: params, headers: headers
       end.to change { User.find_by(email: email)&.register_status }.from(nil).to("incomplete")
-    end
-    context "確認パスワードが異なっているとき" do
-      let(:invalid_params) do
-        {
-          "name": "name",
-          "email": email,
-          "password": password,
-          "password_confirm": "bcde1234"
-        }
-      end
-      it "エラーが返されること" do
-        post api_register_path, params: invalid_params, headers: headers
-        expect(response).to have_http_status(400)
-      end
     end
   end
 

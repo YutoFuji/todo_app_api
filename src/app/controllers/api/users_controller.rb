@@ -1,9 +1,5 @@
 class Api::UsersController < ApplicationController
   def create
-    unless password_confirm_same?
-      raise ActionController::BadRequest
-    end
-
     user = User.new(user_params)
     user.incomplete!
 
