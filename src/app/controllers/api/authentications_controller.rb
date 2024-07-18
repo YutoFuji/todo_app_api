@@ -21,7 +21,7 @@ class Api::AuthenticationsController < ApplicationController
     user.remove_register_token
 
     # TODO: パラメータをつける（フロントで出しわけするため）
-    login_url = "http://localhost:3000/login"
+    login_url = "#{ENV["FRONTEND_BASE_URL"]}/login"
 
     redirect_to login_url
   end
