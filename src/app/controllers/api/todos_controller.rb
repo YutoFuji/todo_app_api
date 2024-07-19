@@ -18,9 +18,10 @@ class Api::TodosController < ApplicationController
   end
 
   def update
-    todo.update!(todo_params)
+    @todo = current_user.todos.find(params[:id])
+    @todo.update!(todo_params)
 
-    render json: todo
+    render json: @todo
   end
 
   def destroy
@@ -36,6 +37,6 @@ class Api::TodosController < ApplicationController
   end
 
   def todo
-    current_user.todos.find(params[:id])
+    Todo.find(params[:id])
   end
 end
