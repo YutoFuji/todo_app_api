@@ -315,6 +315,7 @@ components:
         - content
         - status
         - target_completion_date
+        - is_published
       properties:
         title:
           type: string
@@ -324,6 +325,8 @@ components:
           type: string
         target_completion_date:
           type: string
+        is_published:
+          type: boolean
   responses:
     Todo:
       type: object
@@ -340,6 +343,8 @@ components:
           type: string
         target_completion_date:
           type: string
+        is_published:
+          type: boolean
         user_id:
           type: integer
           format: int64
