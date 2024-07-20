@@ -23,7 +23,9 @@ Rails.application.routes.draw do
       resource :password, only: %i[create update]
     end
     resource :user do
-      resources :todos
+      resources :todos do
+        resource :favorites, only: %i[create destroy]
+      end
     end
   end
 end

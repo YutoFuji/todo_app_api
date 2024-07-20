@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :todos, dependent: :destroy
+  has_many :favorites, dependent: :destroy
 
   validates :password, format: { with: /\A(?=.*[a-z])(?=.*\d)[a-z\d]{8,}\z/},
                        allow_nil: true
