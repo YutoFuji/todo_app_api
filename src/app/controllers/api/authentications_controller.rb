@@ -5,7 +5,7 @@ class Api::AuthenticationsController < ApplicationController
 
     if @user&.authenticate(params[:password])
       token = create_token(@user.id)
-      render json: { "token": token }
+      render json: { "token": token }.merge(@user.as_json)
     else
       raise ServerError::BadRequest
     end
