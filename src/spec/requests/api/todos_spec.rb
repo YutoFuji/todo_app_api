@@ -2,11 +2,13 @@ require 'rails_helper'
 
 RSpec.describe "Todos", type: :request do
   let!(:user) { create(:user) }
-  let!(:todo) { create(:todo, user_id: user.id) }
+  let!(:user2) {create(:user) }
+  let!(:todo) { create(:todo, user_id: user.id, is_published: true) }
 
-  describe "GET /users/{user_id}/todos" do
-    let!(:todo2) { create(:todo, user_id: user.id) }
-    it "Todo一覧を取得できること" do
+  describe "GET /user/todos" do
+    let!(:todo2) { create(:todo, user_id: user2.id, is_published: true) }
+    let!(:todo3) { create(:todo, user_id: user2.id) }
+    it "公開されているTodoのみを取得できること" do
       authenticate_stub(user)
       get api_user_todos_path(user_id: user.id), headers: headers
       expect(json_response.size).to eq 2
@@ -15,17 +17,19 @@ RSpec.describe "Todos", type: :request do
       expect(json_response[0]["content"]).to eq(todo.content)
       expect(json_response[0]["status"]).to eq(todo.status)
       expect(json_response[0]["target_completion_date"]).to eq(todo.target_completion_date.strftime('%Y-%m-%d'))
+      expect(json_response[0]["is_published"]).to eq(todo.is_published)
       expect(json_response[0]["user_id"]).to eq(user.id)
     end
   end
 
-  describe "POST /users/{user_id}/todos" do
+  describe "POST /user/todos" do
     let(:params) do
       {
         title: "example_title",
         content: "example_content",
         status: "example_status",
-        target_completion_date: "2024-07-03"
+        target_completion_date: "2024-07-03",
+        is_published: true
       }
     end
     it "Todoを作成できること" do
@@ -57,7 +61,7 @@ RSpec.describe "Todos", type: :request do
     end
   end
 
-  describe "GET /users/{user_id}/todos/{id}" do
+  describe "GET /user/todos/{id}" do
     # 別のユーザーがtodo作成していることを再現
     let!(:user2) { create(:user) }
     let!(:todo3) { create(:todo, user_id: user2.id) }
@@ -74,7 +78,7 @@ RSpec.describe "Todos", type: :request do
     end
   end
 
-  describe "PUT /users/{user_id}/todos/{id}" do
+  describe "PUT /user/todos/{id}" do
     let(:params) do
       {
         title: "changed_title",
@@ -95,7 +99,7 @@ RSpec.describe "Todos", type: :request do
     end
   end
 
-  describe "DELETE /users/{user_id}/todos/{id}" do
+  describe "DELETE /user/todos/{id}" do
     it "削除され、データが減っていること" do
       authenticate_stub(user)
       todos = user.todos.all

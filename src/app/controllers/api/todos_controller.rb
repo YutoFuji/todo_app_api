@@ -2,7 +2,7 @@ class Api::TodosController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    todos = current_user.todos
+    todos = Todo.published
 
     render json: todos
   end
@@ -18,9 +18,10 @@ class Api::TodosController < ApplicationController
   end
 
   def update
-    todo.update!(todo_params)
+    @todo = current_user.todos.find(params[:id])
+    @todo.update!(todo_params)
 
-    render json: todo
+    render json: @todo
   end
 
   def destroy
@@ -32,10 +33,10 @@ class Api::TodosController < ApplicationController
   private
 
   def todo_params
-    params.permit(:title, :content, :status, :target_completion_date)
+    params.permit(:title, :content, :status, :target_completion_date, :is_published)
   end
 
   def todo
-    current_user.todos.find(params[:id])
+    Todo.find(params[:id])
   end
 end
