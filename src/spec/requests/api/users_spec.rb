@@ -27,30 +27,17 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "GET /authentication" do
-    let(:reset_token) { SecureRandom.alphanumeric(10) }
-    let(:user) { create(:user, register_token: reset_token, register_token_sent_at: (Time.zone.now - 10.minutes)) }
-    let(:params) do
-      {
-        "token": reset_token
-      }
-    end
-    it "登録状況が更新されていること" do
-      expect do
-        get api_authentication_path, params: params, headers: headers
-      end.to change { User.find(user.id)&.register_status }.from("incomplete").to("complete")
-    end
-    context "トークンが異なっているとき" do
-      let(:invalid_token) { SecureRandom.alphanumeric(10) }
-      let(:invalid_params) do
-        {
-          "token": invalid_token
-        }
-      end
-      it "エラーが返ること" do
-        get api_authentication_path, params: params, headers: headers
-        expect(response).to have_http_status(404)
-      end
+  describe "GET /users/{id}" do
+    let!(:user) { create(:user) }
+    it "他ユーザーの情報が取得できること" do
+      authenticate_stub(user)
+      get api_user_path(id: user.id), headers: headers
+      expect(response).to have_http_status(200)
+      expect(json_response["token"]).to be nil
+      expect(json_response["id"]).to eq(user.id)
+      expect(json_response["name"]).to eq(user.name)
+      expect(json_response["email"]).to eq(user.email)
+      expect(json_response["register_status"]).to eq(user.register_status)
     end
   end
 end

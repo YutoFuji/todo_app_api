@@ -12,7 +12,7 @@ RSpec.describe "Favorites", type: :request do
       authenticate_stub(user)
       favorites = todo.favorites.all
       expect {
-        post api_user_todo_favorites_path(user_id: user.id, todo_id: todo.id), headers: headers
+        post api_todo_favorites_path(user_id: user.id, todo_id: todo.id), headers: headers
       }.to change(favorites, :count).by(+1)
     end
   end
@@ -22,7 +22,7 @@ RSpec.describe "Favorites", type: :request do
       authenticate_stub(user)
       favorites = todo.favorites.all
       expect {
-        delete api_user_todo_favorite_path(user_id: user.id, todo_id: todo.id, id: favorite.id), headers: headers
+        delete api_todo_favorite_path(user_id: user.id, todo_id: todo.id, id: favorite.id), headers: headers
       }.to change(favorites, :count).by(-1)
     end
   end
