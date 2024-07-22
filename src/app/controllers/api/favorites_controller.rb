@@ -1,6 +1,6 @@
 class Api::FavoritesController < ApplicationController
   before_action :authenticate_user!, only: %i[create destroy]
-  before_action :set_todo, only: [:create, :destroy]
+  before_action :set_todo, only: %i[create destroy]
 
   def create
     current_user.favorites.create!(todo_id: @todo.id)
@@ -9,7 +9,7 @@ class Api::FavoritesController < ApplicationController
   end
 
   def destroy
-    favorite = current_user.favorites.find_by!(todo_id: @todo.id)
+    favorite = current_user.favorites.find(params[:id])
     favorite.destroy!
 
     render json: { count: @todo.favorites.count }

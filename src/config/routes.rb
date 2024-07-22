@@ -24,7 +24,10 @@ Rails.application.routes.draw do
     end
     resource :user do
       resources :todos do
-        resource :favorites, only: %i[create destroy]
+        resources :favorites, only: %i[index create destroy]
+        namespace :favorites do
+          resources :users, only: %i[index]
+        end
       end
     end
   end
