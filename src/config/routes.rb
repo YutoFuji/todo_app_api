@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resource :profile, only: %i[update] do
       resource :password, only: %i[create update]
     end
+    resources :users, only: %i[show]
     resource :user do
       resources :todos do
         resources :favorites, only: %i[index create destroy]

@@ -80,6 +80,25 @@ paths:
           description: メールアドレス未認証、ログイン失敗時エラー
         '404':
           description: リクエストされたメールアドレスが存在しないエラー
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: 他ユーザー情報詳細
+      parameters:
+        - name: id
+          in: path
+          description: UserのID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 他ユーザーの情報詳細のオブジェクトを取得する
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/User'
   /user/todos:
     # TODO: add bearer auth
     get:
