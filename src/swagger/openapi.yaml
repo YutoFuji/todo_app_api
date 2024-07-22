@@ -173,13 +173,14 @@ paths:
       responses:
         '200':
           description: 指定のTodoを削除する
-  /user/todos/{id}/favorites:
+  /user/todos/{todo_id}/favorites:
+
     post:
       tags:
         - Todos
       summary: Todoをいいねする
       parameters:
-        - name: id
+        - name: todo_id
           in: path
           description: TodoのID
           required: true
@@ -196,14 +197,21 @@ paths:
                 properties:
                   count:
                     type: integer
+  /user/todos/{todo_id}/favorites/{id}:
     delete:
       tags:
         - Todos
       summary: Todoのいいね解除
       parameters:
-        - name: id
+        - name: todo_id
           in: path
           description: TodoのID
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: FavoriteのID
           required: true
           schema:
             type: integer
@@ -218,6 +226,27 @@ paths:
                 properties:
                   count:
                     type: integer
+  /user/todos/{todo_id}/favorites/users:
+    get:
+      tags:
+        - Todos
+      summary: Todoにいいねしたユーザー一覧
+      parameters:
+        - name: todo_id
+          in: path
+          description: TodoのID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功レスポンス。いいねしているユーザー一覧を配列で返す
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/responses/User'
   /profile:
     put:
       tags:
