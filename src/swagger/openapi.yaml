@@ -99,7 +99,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/responses/User'
-  /user/todos:
+  /todos:
     # TODO: add bearer auth
     get:
       tags:
@@ -133,7 +133,7 @@ paths:
                 $ref: '#/components/responses/Todo'
         '404':
           description: Todo新規作成エラー
-  /user/todos/{id}:
+  /todos/{id}:
     get:
       tags:
         - Todos
@@ -192,7 +192,7 @@ paths:
       responses:
         '200':
           description: 指定のTodoを削除する
-  /user/todos/{todo_id}/favorites:
+  /todos/{todo_id}/favorites:
 
     post:
       tags:
@@ -216,7 +216,7 @@ paths:
                 properties:
                   count:
                     type: integer
-  /user/todos/{todo_id}/favorites/{id}:
+  /todos/{todo_id}/favorites/{id}:
     delete:
       tags:
         - Todos
@@ -245,7 +245,7 @@ paths:
                 properties:
                   count:
                     type: integer
-  /user/todos/{todo_id}/favorites/users:
+  /todos/{todo_id}/favorites/users:
     get:
       tags:
         - Todos
