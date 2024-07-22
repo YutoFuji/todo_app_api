@@ -193,7 +193,6 @@ paths:
         '200':
           description: 指定のTodoを削除する
   /todos/{todo_id}/favorites:
-
     post:
       tags:
         - Todos
@@ -216,6 +215,8 @@ paths:
                 properties:
                   count:
                     type: integer
+        '404':
+          description: 同じ投稿に2回目のいいねを押した時（本来同じ投稿に2回目のいいねを押したら取り消される仕様）
   /todos/{todo_id}/favorites/{id}:
     delete:
       tags:
