@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Checkout and build
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: bundle install
         run: docker compose run --rm rails bundle install
