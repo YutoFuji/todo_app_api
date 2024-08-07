@@ -16,7 +16,6 @@ RSpec.describe "Todos", type: :request do
       expect(json_response[0]["title"]).to eq(todo.title)
       expect(json_response[0]["content"]).to eq(todo.content)
       expect(json_response[0]["status"]).to eq(todo.status)
-      expect(json_response[0]["target_completion_date"]).to eq(todo.target_completion_date.strftime('%Y-%m-%d'))
       expect(json_response[0]["is_published"]).to eq(todo.is_published)
       expect(json_response[0]["user_id"]).to eq(user.id)
     end
@@ -28,7 +27,6 @@ RSpec.describe "Todos", type: :request do
         title: "example_title",
         content: "example_content",
         status: "example_status",
-        target_completion_date: "2024-07-03",
         is_published: true
       }
     end
@@ -49,7 +47,6 @@ RSpec.describe "Todos", type: :request do
         title: "example_title",
         content: "",
         status: "example_status",
-        target_completion_date: "2024-07-03"
       }
     end
     context "空欄があったとき" do
@@ -73,7 +70,6 @@ RSpec.describe "Todos", type: :request do
       expect(json_response["title"]).to eq(todo.title)
       expect(json_response["content"]).to eq(todo.content)
       expect(json_response["status"]).to eq(todo.status)
-      expect(json_response["target_completion_date"]).to eq(todo.target_completion_date.strftime('%Y-%m-%d'))
       expect(json_response["user_id"]).to eq(user.id)
     end
   end

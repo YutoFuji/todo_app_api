@@ -14,7 +14,6 @@ User.all.each do |user|
     title: 'タイトル',
     status: 'テキストテキストテキストテキスト',
     content: 'コンテンツコンテンツコンテンツ',
-    target_completion_date: '2024-07-03',
     is_published: 'true'
   )
 end

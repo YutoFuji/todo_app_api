@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::API
   def create_token(user_id)
-    session_token = JWT.encode(payload(user_id), secret_key)
-
-    session_token
+    JWT.encode(payload(user_id), secret_key)
   end
 
   def current_user
@@ -46,5 +44,9 @@ class ApplicationController < ActionController::API
 
   def password_confirm_same?
     params["password"] == params["password_confirm"]
+  end
+
+  def set_todo
+    @todo = Todo.find(params[:id])
   end
 end
