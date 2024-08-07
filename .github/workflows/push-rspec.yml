@@ -6,19 +6,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Checkout and build
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: bundle install
-        run: docker-compose run --rm rails bundle install
+        run: docker compose run --rm rails bundle install
 
       - name: Build
-        run: docker-compose build
+        run: docker compose build
 
       - name: Create database
-        run: docker-compose run --rm rails bundle exec rails db:create
+        run: docker compose run --rm rails bundle exec rails db:create
 
       - name: Migration
-        run: docker-compose run --rm rails bundle exec ridgepole -c config/database.yml --apply -f db/Schemafile -E test
+        run: docker compose run --rm rails bundle exec ridgepole -c config/database.yml --apply -f db/Schemafile -E test
 
       - name: Test
-        run: docker-compose exec -T rails bundle exec rspec
+        run: docker compose exec -T rails bundle exec rspec
